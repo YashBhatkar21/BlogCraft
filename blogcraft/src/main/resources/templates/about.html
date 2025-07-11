@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlogCraft - About</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 0;
+        }
+        .footer {
+            background-color: #f8f9fa;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        .feature-icon {
+            font-size: 3rem;
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-pen-fancy me-2"></i>BlogCraft
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/about">About</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">
+                            <i class="fas fa-sign-in-alt me-1"></i>Login
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h1 class="display-4 fw-bold mb-4">About BlogCraft</h1>
+                    <p class="lead">Empowering writers to share their voice with the world</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Content -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="text-center mb-5">
+                        <h2>Our Mission</h2>
+                        <p class="lead text-muted">BlogCraft is designed to provide writers with a simple, elegant platform to share their thoughts, stories, and ideas with readers around the world.</p>
+                    </div>
+                    
+                    <div class="row mb-5">
+                        <div class="col-md-4 text-center mb-4">
+                            <i class="fas fa-pen-to-square feature-icon"></i>
+                            <h4>Easy Writing</h4>
+                            <p class="text-muted">Simple and intuitive writing interface that lets you focus on your content.</p>
+                        </div>
+                        <div class="col-md-4 text-center mb-4">
+                            <i class="fas fa-share-alt feature-icon"></i>
+                            <h4>Share Stories</h4>
+                            <p class="text-muted">Reach readers worldwide with our modern publishing platform.</p>
+                        </div>
+                        <div class="col-md-4 text-center mb-4">
+                            <i class="fas fa-users feature-icon"></i>
+                            <h4>Build Community</h4>
+                            <p class="text-muted">Connect with fellow writers and readers in a supportive environment.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-body">
+                            <h3>Why Choose BlogCraft?</h3>
+                            <ul class="list-unstyled">
+                                <li class="mb-3">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    <strong>Clean Design:</strong> Focus on your writing with our distraction-free interface
+                                </li>
+                                <li class="mb-3">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    <strong>Secure Platform:</strong> Your content and data are protected with industry-standard security
+                                </li>
+                                <li class="mb-3">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    <strong>Mobile Friendly:</strong> Write and read on any device, anywhere
+                                </li>
+                                <li class="mb-3">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    <strong>Fast Performance:</strong> Built with modern technologies for optimal speed
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>BlogCraft</h5>
+                    <p class="text-muted">A modern blog writing platform for creative minds.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="text-muted">&copy; 2024 BlogCraft. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

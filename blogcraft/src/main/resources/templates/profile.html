@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${profileUser.fullName != null ? profileUser.fullName : profileUser.username} + ' - Profile - BlogCraft'">Profile - BlogCraft</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-secondary, #f9fafb);
+            color: var(--text-primary, #1f2937);
+        }
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            background: var(--primary-color, #6366f1);
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-right: 2rem;
+        }
+        .profile-info h2 {
+            margin-bottom: 0.2rem;
+        }
+        .profile-info .username {
+            color: var(--text-secondary, #888);
+            font-size: 1.1rem;
+        }
+        .profile-info .join-date {
+            color: var(--text-light, #aaa);
+            font-size: 0.95rem;
+        }
+        .post-card {
+            border: none;
+            box-shadow: var(--shadow-md, 0 2px 10px rgba(0,0,0,0.07));
+            margin-bottom: 2rem;
+            transition: transform 0.2s;
+            border-radius: var(--radius-md, 0.5rem);
+        }
+        .post-card:hover {
+            transform: translateY(-4px);
+        }
+        .badge-category {
+            background: var(--bg-tertiary, #e0e7ff);
+            color: var(--primary-dark, #3730a3);
+        }
+        .badge-tag {
+            background: var(--bg-secondary, #f3f4f6);
+            color: var(--text-secondary, #374151);
+        }
+        .tab-content {
+            margin-top: 1.5rem;
+        }
+        .nav-tabs .nav-link.active {
+            color: var(--primary-color, #6366f1);
+            border-color: var(--primary-color, #6366f1) var(--primary-color, #6366f1) #fff;
+            background: #fff;
+        }
+        .nav-tabs .nav-link {
+            color: var(--text-secondary, #6b7280);
+            border-radius: var(--radius-sm, 0.375rem) 0.375rem 0 0;
+        }
+        .profile-actions .btn {
+            min-width: 120px;
+        }
+        @media (max-width: 600px) {
+            .profile-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .profile-avatar {
+                margin-bottom: 1rem;
+                margin-right: 0;
+            }
+            .profile-actions {
+                flex-direction: row;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div th:replace="fragments/navbar :: navbar"></div>
+<div class="container" style="max-width: 700px; min-height: 70vh;">
+    <div class="d-flex align-items-center mb-3">
+        <a href="/dashboard" class="btn btn-outline-secondary me-2"><i class="fas fa-arrow-left"></i></a>
+        <h2 class="mb-0">Profile</h2>
+        <div th:if="${profileUser.role.name() == 'ADMIN'}" class="ms-auto">
+            <a href="/admin/users" class="btn btn-outline-danger ms-2"><i class="fas fa-users-cog me-1"></i> User Management</a>
+        </div>
+    </div>
+    <div class="profile-header">
+        <div class="profile-avatar" th:text="${profileUser.fullName != null ? profileUser.fullName.substring(0,1) : profileUser.username.substring(0,1)}">U</div>
+        <div class="profile-info">
+            <h2 th:text="${profileUser.fullName != null ? profileUser.fullName : profileUser.username}">User Name</h2>
+            <div class="username">@<span th:text="${profileUser.username}">username</span></div>
+            <div class="join-date">Joined <span th:text="${#temporals.format(profileUser.createdAt, 'MMM yyyy')}">Date</span></div>
+            <div th:if="${profileUser.role.name() == 'ADMIN'}" class="badge bg-danger mt-2">Admin</div>
+            <div th:if="${profileUser.bio != null and !#strings.isEmpty(profileUser.bio)}" class="mt-2">
+                <i class="fas fa-info-circle me-1"></i>
+                <span th:text="${profileUser.bio}">User bio goes here.</span>
+            </div>
+        </div>
+        <div th:if="${isCurrentUser}" class="ms-auto d-flex flex-column align-items-end profile-actions">
+            <a href="/profile/edit" class="btn btn-outline-secondary mb-2">
+                <i class="fas fa-user-edit me-1"></i>Edit Profile
+            </a>
+            <a href="/posts/new" class="btn btn-primary">
+                <i class="fas fa-plus me-2"></i>New Blog
+            </a>
+        </div>
+    </div>
+    <ul class="nav nav-tabs mb-4" th:if="${isCurrentUser}">
+        <li class="nav-item">
+            <a class="nav-link active" id="published-tab" data-bs-toggle="tab" href="#published">Published</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="drafts-tab" data-bs-toggle="tab" href="#drafts">Drafts</a>
+        </li>
+    </ul>
+    <div th:if="${isCurrentUser}" class="tab-content">
+        <div class="tab-pane fade show active" id="published">
+            <div th:if="${posts != null and !posts.empty}">
+                <div th:each="post : ${posts}" th:if="${post.status.name() == 'PUBLISHED'}">
+                    <div class="card post-card">
+                        <div class="card-body">
+                            <h4 class="card-title mb-1" th:utext="${post.title}">Post Title</h4>
+                            <div class="mb-2">
+                                <span th:each="tag : ${post.tags}" class="badge badge-tag me-1" th:text="${tag.name}">Tag</span>
+                                <span th:if="${post.category != null}" class="badge badge-category ms-1" th:text="${post.category.name}">Category</span>
+                            </div>
+                            <p class="card-text text-muted" th:utext="${post.excerpt}">Post excerpt...</p>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <span class="badge bg-success">Published</span>
+                                <div>
+                                    <a th:href="@{'/posts/edit/' + ${post.id}}" class="btn btn-sm btn-outline-secondary me-1">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </a>
+                                    <form th:action="@{'/posts/delete/' + ${post.id}}" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this post?');">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                            <i class="fas fa-trash"></i> Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${posts == null or #lists.select(posts, p -> p.status.name() == 'PUBLISHED').isEmpty()}">
+                <div class="text-center text-muted py-5">
+                    <i class="fas fa-newspaper" style="font-size: 3rem; color: #ccc;"></i>
+                    <h5>No published posts yet.</h5>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="drafts">
+            <div th:if="${posts != null and !posts.empty}">
+                <div th:each="post : ${posts}" th:if="${post.status.name() == 'DRAFT'}">
+                    <div class="card post-card">
+                        <div class="card-body">
+                            <h4 class="card-title mb-1" th:utext="${post.title}">Draft Title</h4>
+                            <div class="mb-2">
+                                <span th:each="tag : ${post.tags}" class="badge badge-tag me-1" th:text="${tag.name}">Tag</span>
+                                <span th:if="${post.category != null}" class="badge badge-category ms-1" th:text="${post.category.name}">Category</span>
+                            </div>
+                            <p class="card-text text-muted" th:utext="${post.excerpt}">Draft excerpt...</p>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <span class="badge bg-warning text-dark">Draft</span>
+                                <div>
+                                    <a th:href="@{'/posts/edit/' + ${post.id}}" class="btn btn-sm btn-outline-secondary me-1">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </a>
+                                    <form th:action="@{'/posts/delete/' + ${post.id}}" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this draft?');">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                            <i class="fas fa-trash"></i> Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${posts == null or #lists.select(posts, p -> p.status.name() == 'DRAFT').isEmpty()}">
+                <div class="text-center text-muted py-5">
+                    <i class="fas fa-file-alt" style="font-size: 3rem; color: #ccc;"></i>
+                    <h5>No drafts yet.</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:if="${!isCurrentUser}">
+        <h4 class="mb-4">Posts</h4>
+        <div th:if="${posts != null and !posts.empty}">
+            <div th:each="post : ${posts}" th:if="${post.status.name() == 'PUBLISHED'}">
+                <div class="card post-card">
+                    <div class="card-body">
+                        <h4 class="card-title mb-1" th:utext="${post.title}">Post Title</h4>
+                        <div class="mb-2">
+                            <span th:each="tag : ${post.tags}" class="badge badge-tag me-1" th:text="${tag.name}">Tag</span>
+                            <span th:if="${post.category != null}" class="badge badge-category ms-1" th:text="${post.category.name}">Category</span>
+                        </div>
+                        <p class="card-text text-muted" th:utext="${post.excerpt}">Post excerpt...</p>
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <span class="badge bg-success">Published</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div th:if="${posts == null or #lists.select(posts, p -> p.status.name() == 'PUBLISHED').isEmpty()}">
+            <div class="text-center text-muted py-5">
+                <i class="fas fa-newspaper" style="font-size: 3rem; color: #ccc;"></i>
+                <h5>No published posts yet.</h5>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="fragments/footer :: footer"></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

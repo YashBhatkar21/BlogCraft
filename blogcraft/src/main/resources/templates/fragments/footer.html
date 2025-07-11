@@ -1,0 +1,36 @@
+<footer class="custom-footer" th:fragment="footer">
+    <div class="footer-content">
+        <h3>BlogCraft</h3>
+        <p class="footer-desc">A modern blog writing platform for creative minds.</p>
+        <p class="footer-copy">&copy; 2024 BlogCraft. All rights reserved.</p>
+    </div>
+    <style>
+        .custom-footer {
+            width: 100%;
+            background: var(--bg-primary, #fff);
+            border-top: 1px solid var(--border-color, #e5e7eb);
+            padding: 2rem 0 1.5rem 0;
+            margin-top: auto;
+        }
+        .footer-content {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+            color: var(--text-secondary, #6b7280);
+        }
+        .custom-footer h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary-color, #6366f1);
+            margin-bottom: 0.5rem;
+        }
+        .footer-desc {
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+        .footer-copy {
+            font-size: 0.95rem;
+            color: var(--text-light, #9ca3af);
+        }
+    </style>
+</footer> 

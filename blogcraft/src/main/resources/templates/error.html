@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error - BlogCraft</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary-color: #8b5cf6;
+            --accent-color: #06b6d4;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --text-light: #9ca3af;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --bg-tertiary: #f3f4f6;
+            --border-color: #e5e7eb;
+            --success-color: #10b981;
+            --error-color: #ef4444;
+            --warning-color: #f59e0b;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background-color: var(--bg-secondary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo::before {
+            content: "✍️";
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary-color);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--radius-md);
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.875rem;
+            line-height: 1;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-primary);
+            border-color: var(--primary-color);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.75rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        /* Error Container */
+        .error-container {
+            max-width: 600px;
+            text-align: center;
+            background: var(--bg-primary);
+            border-radius: var(--radius-xl);
+            padding: 3rem 2rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+        }
+
+        .error-icon {
+            font-size: 4rem;
+            color: var(--error-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .error-code {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .error-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .error-message {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .error-details {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .error-details h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .error-details p {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .error-details code {
+            background: var(--bg-tertiary);
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        /* Action Buttons */
+        .error-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Utility Classes */
+        .text-center {
+            text-align: center;
+        }
+
+        .text-primary {
+            color: var(--primary-color);
+        }
+
+        .text-secondary {
+            color: var(--text-secondary);
+        }
+
+        .text-error {
+            color: var(--error-color);
+        }
+
+        .mb-3 {
+            margin-bottom: 1rem;
+        }
+
+        .mb-4 {
+            margin-bottom: 1.5rem;
+        }
+
+        .mt-3 {
+            margin-top: 1rem;
+        }
+
+        .mt-4 {
+            margin-top: 1.5rem;
+        }
+
+        .w-full {
+            width: 100%;
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        .items-center {
+            align-items: center;
+        }
+
+        .justify-center {
+            justify-content: center;
+        }
+
+        .justify-between {
+            justify-content: space-between;
+        }
+
+        .gap-2 {
+            gap: 0.5rem;
+        }
+
+        .gap-3 {
+            gap: 1rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar-container {
+                padding: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .error-container {
+                padding: 2rem 1.5rem;
+            }
+
+            .error-code {
+                font-size: 2.5rem;
+            }
+
+            .error-title {
+                font-size: 1.25rem;
+            }
+
+            .error-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="/" class="logo">BlogCraft</a>
+            
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/about">About</a></li>
+            </ul>
+            
+            <div class="nav-buttons">
+                <div th:if="${user != null}">
+                    <a href="/profile" class="btn btn-secondary btn-sm">
+                        <span th:text="${user.fullName != null ? user.fullName : user.username}">Profile</span>
+                    </a>
+                    <form th:action="@{/logout}" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-outline btn-sm">Logout</button>
+                    </form>
+                </div>
+                <div th:if="${user == null}">
+                    <a href="/login" class="btn btn-secondary btn-sm">Login</a>
+                    <a href="/register" class="btn btn-primary btn-sm">Register</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="error-container">
+            <div class="error-icon">⚠️</div>
+            
+            <h1 class="error-code" th:text="${status}">404</h1>
+            
+            <h2 class="error-title" th:text="${error}">Page Not Found</h2>
+            
+            <p class="error-message" th:text="${message}">
+                The page you're looking for doesn't exist or has been moved.
+            </p>
+
+            <div th:if="${trace != null and !#strings.isEmpty(trace)}" class="error-details">
+                <h4>Error Details</h4>
+                <p><strong>Path:</strong> <code th:text="${path}">/some/path</code></p>
+                <p><strong>Timestamp:</strong> <code th:text="${timestamp}">2024-01-01 12:00:00</code></p>
+                <p th:if="${status != null}"><strong>Status:</strong> <code th:text="${status}">404</code></p>
+            </div>
+
+            <div class="error-actions">
+                <a href="/" class="btn btn-primary">
+                    <i class="fas fa-home me-1"></i>Go Home
+                </a>
+                <a href="/dashboard" class="btn btn-secondary">
+                    <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+                </a>
+                <button onclick="history.back()" class="btn btn-outline">
+                    <i class="fas fa-arrow-left me-1"></i>Go Back
+                </button>
+            </div>
+        </div>
+    </main>
+</body>
+</html> 

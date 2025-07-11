@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlogCraft - Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 0;
+        }
+        .post-card {
+            transition: transform 0.2s;
+            border: none;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .post-card:hover {
+            transform: translateY(-5px);
+        }
+        .footer {
+            background-color: #f8f9fa;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-pen-fancy me-2"></i>BlogCraft
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">About</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">
+                            <i class="fas fa-sign-in-alt me-1"></i>Login
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="display-4 fw-bold mb-4">Welcome to BlogCraft</h1>
+                    <p class="lead mb-4">A modern platform for writers to share their stories, ideas, and creativity with the world.</p>
+                    <a href="/login" class="btn btn-light btn-lg">
+                        <i class="fas fa-pen me-2"></i>Start Writing
+                    </a>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <i class="fas fa-pen-fancy" style="font-size: 8rem; opacity: 0.8;"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Posts Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="text-center mb-5">Latest Posts</h2>
+                </div>
+            </div>
+            
+            <div class="row" th:if="${posts != null and !posts.empty}">
+                <div class="col-lg-4 col-md-6 mb-4" th:each="post : ${posts}">
+                    <div class="card post-card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title" th:utext="${post.title}">Post Title</h5>
+                            <p class="card-text text-muted" th:utext="${post.excerpt}">Post excerpt...</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted" th:text="${#temporals.format(post.createdAt, 'MMM dd, yyyy')}">Date</small>
+                                <span class="badge bg-primary" th:text="${post.author.fullName}">Author</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row" th:if="${posts == null or posts.empty}">
+                <div class="col-12 text-center">
+                    <div class="py-5">
+                        <i class="fas fa-newspaper" style="font-size: 4rem; color: #ccc; margin-bottom: 1rem;"></i>
+                        <h4 class="text-muted">No posts yet</h4>
+                        <p class="text-muted">Be the first to share your story!</p>
+                        <a href="/login" class="btn btn-primary">
+                            <i class="fas fa-pen me-2"></i>Write Your First Post
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>BlogCraft</h5>
+                    <p class="text-muted">A modern blog writing platform for creative minds.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="text-muted">&copy; 2024 BlogCraft. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

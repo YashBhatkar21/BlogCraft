@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - BlogCraft</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary-color: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary-color: #8b5cf6;
+            --accent-color: #06b6d4;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --text-light: #9ca3af;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --bg-tertiary: #f3f4f6;
+            --border-color: #e5e7eb;
+            --success-color: #10b981;
+            --error-color: #ef4444;
+            --warning-color: #f59e0b;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+        }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background-color: var(--bg-secondary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .dashboard-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            min-height: 70vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1rem 3rem 1rem;
+        }
+        .dashboard-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            margin-bottom: 2.5rem;
+            gap: 2rem;
+        }
+        .dashboard-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary-color, #6366f1);
+            text-align: center;
+        }
+        .stats-cards {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            justify-content: center;
+            width: 100%;
+        }
+        .stat-card {
+            background: var(--bg-primary, #fff);
+            border-radius: var(--radius-md, 0.5rem);
+            box-shadow: var(--shadow-md, 0 2px 10px rgba(0,0,0,0.07));
+            padding: 1.5rem 2rem;
+            min-width: 220px;
+            max-width: 300px;
+            text-align: center;
+            flex: 0 1 300px;
+        }
+        .stat-label {
+            color: var(--text-secondary, #6b7280);
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color, #6366f1);
+        }
+        .posts-section {
+            margin-top: 2rem;
+            width: 100%;
+        }
+        .posts-section h3 {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .post-list {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        .post-card {
+            background: var(--bg-primary, #fff);
+            border-radius: var(--radius-md, 0.5rem);
+            box-shadow: var(--shadow-sm, 0 1px 2px 0 rgba(0,0,0,0.05));
+            margin-bottom: 1.5rem;
+            padding: 1.5rem 1.2rem;
+            transition: box-shadow 0.2s;
+            width: 100%;
+            max-width: 700px;
+        }
+        .post-card:hover {
+            box-shadow: var(--shadow-md, 0 2px 10px rgba(0,0,0,0.07));
+        }
+        .post-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary-color, #6366f1);
+            margin-bottom: 0.5rem;
+        }
+        .post-meta {
+            color: var(--text-secondary, #6b7280);
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+        }
+        .badge-category {
+            background: var(--bg-tertiary, #e0e7ff);
+            color: var(--primary-dark, #3730a3);
+            margin-right: 0.5rem;
+        }
+        .badge-tag {
+            background: var(--bg-secondary, #f3f4f6);
+            color: var(--text-secondary, #374151);
+            margin-right: 0.3rem;
+        }
+        .post-actions {
+            margin-top: 1rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+        .btn {
+            font-family: inherit;
+            font-weight: 500;
+            border-radius: var(--radius-md, 0.5rem);
+            padding: 0.5rem 1.2rem;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+        .btn-primary {
+            background: var(--primary-color, #6366f1);
+            color: #fff;
+            border: none;
+        }
+        .btn-primary:hover {
+            background: var(--primary-dark, #4f46e5);
+        }
+        .btn-outline-secondary {
+            background: transparent;
+            color: var(--primary-color, #6366f1);
+            border: 2px solid var(--primary-color, #6366f1);
+        }
+        .btn-outline-secondary:hover {
+            background: var(--primary-color, #6366f1);
+            color: #fff;
+        }
+        @media (max-width: 900px) {
+            .dashboard-container {
+                padding: 1rem 0.5rem 2rem 0.5rem;
+            }
+            .stats-cards {
+                flex-wrap: wrap;
+            }
+            .stat-card {
+                min-width: 180px;
+                max-width: 100%;
+            }
+            .dashboard-header {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div th:replace="fragments/navbar :: navbar"></div>
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <div class="dashboard-title">
+            Welcome, <span th:text="${user.fullName != null ? user.fullName : user.username}">User</span>!
+        </div>
+        <a href="/posts/new" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>New Blog
+        </a>
+    </div>
+    <div class="stats-cards">
+        <div class="stat-card">
+            <div class="stat-label">Total Posts</div>
+            <div class="stat-value" th:text="${postCount}">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Published</div>
+            <div class="stat-value" th:text="${publishedCount}">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Drafts</div>
+            <div class="stat-value" th:text="${draftCount}">0</div>
+        </div>
+    </div>
+    <div class="posts-section">
+        <h3 class="mb-4">All Blog Posts</h3>
+        <div class="post-list">
+            <div th:if="${posts != null and !posts.empty}">
+                <div th:each="post : ${posts}">
+                    <div class="post-card">
+                        <div class="post-title" th:utext="${post.title}">Post Title</div>
+                        <div class="post-meta">
+                            <span th:text="${#temporals.format(post.createdAt, 'dd MMM yyyy')}">Date</span>
+                            &middot;
+                            <span th:text="${post.author.fullName != null ? post.author.fullName : post.author.username}">Author</span>
+                            <span th:if="${post.status.name() == 'DRAFT'}" class="badge bg-warning text-dark ms-2">Draft</span>
+                            <span th:if="${post.status.name() == 'PUBLISHED'}" class="badge bg-success ms-2">Published</span>
+                        </div>
+                        <div class="mb-2">
+                            <span th:each="tag : ${post.tags}" class="badge badge-tag" th:text="${tag.name}">Tag</span>
+                            <span th:if="${post.category != null}" class="badge badge-category" th:text="${post.category.name}">Category</span>
+                        </div>
+                        <div class="text-muted mb-2" th:utext="${post.excerpt}">Post excerpt...</div>
+                        <div class="post-actions">
+                            <a th:href="@{'/posts/edit/' + ${post.id}}" class="btn btn-outline-secondary btn-sm">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                            <form th:action="@{'/posts/delete/' + ${post.id}}" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this post?');">
+                                <button type="submit" class="btn btn-outline-secondary btn-sm">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${posts == null or posts.empty}">
+                <div class="text-center text-muted py-5">
+                    <i class="fas fa-newspaper" style="font-size: 3rem; color: #ccc;"></i>
+                    <h5>No blog posts found.</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="fragments/footer :: footer"></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
